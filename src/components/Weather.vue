@@ -1,22 +1,29 @@
 <template>
-<div class="container">
-  <div class="weather-icon">
-    <div class="weather-icons">
+    <div class="content">
+      <h1 class="text-center pt-5">Прогноз погоды</h1>
+      <div class="weather-icons">
       
-    </div>
+    </div>    
     <div class="row">
-      <input type="text" class=" col-9 form-control">
-      <button @click="weatherApi()" class="btn btn-success col-2 btn-search">Поиск</button>
+      <input type="text" class="form-control mt-4" placeholder="Введите страну">
+      <button @click="weatherApi()" class="btn-search mt-4">Найти</button>
+      <div class="">
+        <h1 class="mt-3 text-center" v-for="(y, r) in arr" :key="r">{{y.city}}</h1>
+        <h4 class="text-center"  v-for="(y, r) in arr" :key="r">{{y.main}}</h4>
+        <h1 class="temp text-center" v-for="(y, r) in arr" :key="r">{{y.temp}}</h1>
+        <div class="x2 text-center">
+          <div class="cloud"></div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+    </div>
 </template>
 <script>
-import Weather from '@/components/Weather.vue';
 export default {
+  props: ['reports'],
   name: 'App',
   data: () => ({
-    arr: [
+    arr : [
 
     ]
   }),
@@ -25,55 +32,203 @@ export default {
     weatherApi() {
       let token = '1cd30991dd9bd85fa384b9abc5096a2b'
       let input = document.querySelector('input')
-      fetch(`api.openweathermap.org/data/2.5/weather?q=${input.value}&appid=${token}`)
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${input.value}&appid=${token}&units=metric`)
       .then(res => res.json())
       .then(json => {
-      console.log(json);
+        console.log(json);
+      })
+    },
+},
+mounted: function() {
+    console.log("getLocation Called");
+    var cityApi = 'https://api.bigdatacloud.net/data/reverse-geocode-client' 
+      navigator.geolocation.getCurrentPosition(
+      (position) => {
+      cityApi =
+      cityApi +
+      "?latitude=" +
+      position.coords.latitude +
+      "&longitude=" +
+      position.coords.longitude +
+      "&localityLanguage=en"
+      fetch(cityApi)
+      .then(res => res.json())
+      .then(json => {
+      let cityn = json['city']
       let z = {
-        city: json
+        city: cityn,
       }
       this.arr.unshift(z)
-          
-    })
-    } 
-  },
-  mounted: function() {
-      // this.$nextTick(function () {
-      //   const successCallBlock = (position) => {
-      //   console.log(position);
-      // }
-      // navigator.geolocation.watchPosition(successCallBlock)
-      // })
-      // if ('geolocation' in navigator) {
-      //   console.log('geolocation avaiable');
-      //   navigator.geolocation.watchPosition( position => {
-      //     console.log(position);
-      //   } )
-      // } else {
-      //   console.log('geolocation ');
-      // }
-      if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      }
-      )}
-  // mounted: function () {
-  //     let token = '1cd30991dd9bd85fa384b9abc5096a2b'
-  //     let input = document.querySelector('input')
-  //     fetch(`api.openweathermap.org/data/2.5/weather?q=${input.value}&appid=${token}`)
-  //     .then(res => res.json())
-  //     .then(json => {
-  //     console.log(json);
-  //     let z = {
-  //       city: json
-  //     }
-  //     this.arr.unshift(z)
-          
-  //   })
-  // },
-}}
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityn}&appid=1cd30991dd9bd85fa384b9abc5096a2b&units=metric`)
+        .then(res => res.json())
+        .then(json => {
+          console.log(json);
+          let weatherInfo = {
+            temp: json['main']['temp'],
+            main: json['weather'][0]['main'],
+            tempmax: json['main']['temp_max'],
+            tempmin: json['main']['temp_min'],
+            feelslike: json['main']['feels_like']
+          }
+          this.arr.unshift(weatherInfo)
+        })
+        
+      })
+    },)
+},
+}
 </script>
 
 <style scopped>
+@import url('https://fonts.googleapis.com/css2?family=KoHo:wght@500&display=swap');
+body{
+  font-family: 'KoHo', sans-serif !important;
+}
+.row{
+  display: flex !important;
+  justify-content: space-between;
+  margin-top: 100px;
+}
+.btn-search{
+  width: 200px !important;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 5px;
+  transition: .5s;
+}
+
+.btn-search:hover{
+  background-color: rgb(56, 22, 59);
+  border-radius: 15px;
+  color: #fff;
+}
+
+.form-control{
+  width: 1100px !important;
+}
+
+.temp{
+  font-size: 50px !important;
+  font-weight: bold;
+}
+@media (max-width: 1400px) {
+  .container{
+    width: 1200px !important;
+  }
+  .btn-search{
+    margin-top: 30px !important;
+    width: 100% !important;
+    height: 40px;
+  }
+  input{
+    width: 100% !important;
+  }
+    .x2 {
+	-webkit-transform: scale(0.3);
+	-moz-transform: scale(0.3);
+	transform: scale(0.3);
+  margin-right: 0px !important;
+
+}
+}
+@media (max-width: 1000px) {
+  .container{
+    width: 950px !important;
+  }
+  .btn-search{
+    margin-top: 30px !important;
+    width: 100% !important;
+  }
+    .x2 {
+	-webkit-transform: scale(0.3);
+	-moz-transform: scale(0.3);
+	transform: scale(0.3);
+  margin-right: 0px !important;
+
+}
+}
+@media (max-width: 900px) {
+  .container{
+    width: 850px !important;
+  }
+  .btn-search{
+    margin-top: 30px !important;
+    width: 100% !important;
+  }
+    .x2 {
+	-webkit-transform: scale(0.3);
+	-moz-transform: scale(0.3);
+	transform: scale(0.3);
+  margin-right: 0px !important;
+
+}
+}
+@media (max-width: 800px) {
+  .container{
+    width: 750px !important;
+  }
+  .btn-search{
+    margin-top: 30px !important;
+    width: 100% !important;
+  }
+  .x2 {
+	-webkit-transform: scale(0.3);
+	-moz-transform: scale(0.3);
+	transform: scale(0.3);
+  margin-right: 0px !important;
+
+}
+}
+@media (max-width: 700px) {
+  .container{
+    width: 650px !important;
+  }
+  .btn-search{
+    margin-top: 30px !important;
+    width: 100% !important;
+  }
+  .x2 {
+	-webkit-transform: scale(0.3);
+	-moz-transform: scale(0.3);
+	transform: scale(0.3);
+  margin-right: 0px !important;
+}
+}
+@media (max-width: 400px) {
+  .container{
+    width: 350px !important;
+  }
+  .btn-search{
+    margin-top: 30px !important;
+    width: 100% !important;
+  }
+  .x2 {
+	-webkit-transform: scale(0.3);
+	-moz-transform: scale(0.3);
+	transform: scale(0.3);
+  margin-right: 0px !important;
+
+}
+}
+@media (max-width: 300px) {
+  .container{
+    width: 0px !important;
+  }
+  .btn-search{
+    margin-top: 30px !important;
+    width: 100px !important;
+  }
+  .x2 {
+	-webkit-transform: scale(0.3);
+	-moz-transform: scale(0.3);
+	transform: scale(0.3);
+  margin-right: 0px !important;
+
+}
+}
+
+
 /* NIGHT */
 /* .night{
   background-color: rgb(37, 36, 36);
@@ -148,21 +303,14 @@ export default {
   100%{
     transform: translateY(-0px);
   }
-}
+} */
 
-.rain{
-  background-color: #41ba9c;
-  height: 170px;
-  width: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .x2 {
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
+  margin-right: -242px;
 }
 .cloud {
 	background: #ccc;
@@ -221,7 +369,7 @@ export default {
   height: 6px;
 
   animation: rain 0.65s linear infinite;
-} */
+}
 /* .drop {
   background-color: red;
   width: 5px;
