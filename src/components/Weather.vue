@@ -11,9 +11,7 @@
         <h3 class="mt-3 text-center" v-for="(y, r) in arr" :key="r">{{y.name}}</h3>
         <h4 class="text-center"  v-for="(y, r) in arr" :key="r">{{y.main}}</h4>
         <h2 class="temp text-center" v-for="(y, r) in arr" :key="r">{{y.temp}}</h2>
-        <div class="x2 text-center">
-          <div class="cloud"></div>
-        </div>
+        <img class="text-center" src="../assets/weather-icons-master/svg/wi-cloud.svg" alt="">
       </div>
     </div>
     </div>
@@ -30,20 +28,30 @@ export default {
   
   methods: {
     weatherApi() {
-      let token = '1cd30991dd9bd85fa384b9abc5096a2b'
       let input = document.querySelector('input')
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${input.value}&appid=${token}&units=metric`)
-      .then(res => res.json())
-      .then(json => {
-        console.log(json);
-        let h3 = document.querySelector('h3')
-        let h4 = document.querySelector('h4')
-        let h2 = document.querySelector('h2')
-        h3.innerHTML = json['name']
-        h4.innerHTML = json['main']['temp']
-        h2.innerHTML = json['weather'][0]['main']
+      if (input.value == 0) {
+        input.style.border = '1px solid red'
+      } else {
+        let token = '1cd30991dd9bd85fa384b9abc5096a2b'
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${input.value}&appid=1cd30991dd9bd85fa384b9abc5096a2b&units=metric`)
+        .then(res => res.json())
+        .then(json => {
+          console.log(json);
+          let h3 = document.querySelector('h3')
+          let h4 = document.querySelector('h4')
+          let h2 = document.querySelector('h2')
+          h3.innerHTML = json['name']
+          h4.innerHTML = json['main']['temp']
+          h2.innerHTML = json['weather'][0]['main']
+          switch (json['main']['temp']) {
+            case 'Clouds':
+              
+          }
       })
-    }
+      input.style.border - '1px solid gray'
+      }
+      
+} 
 },
 mounted: function() {
     console.log("getLocation Called");
@@ -113,6 +121,11 @@ body{
 
 .form-control{
   width: 1100px !important;
+}
+
+img{
+  width: 100px;
+  height: 100px;
 }
 
 .temp{
@@ -313,7 +326,7 @@ body{
 } */
 
 
-.x2 {
+/* .x2 {
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
@@ -376,7 +389,7 @@ body{
   height: 6px;
 
   animation: rain 0.65s linear infinite;
-}
+} */
 /* .drop {
   background-color: red;
   width: 5px;
