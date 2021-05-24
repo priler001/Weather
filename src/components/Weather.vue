@@ -7,10 +7,10 @@
     <div class="row">
       <input type="text" class="form-control mt-4" placeholder="Введите страну">
       <button @click="weatherApi()" class="btn-search mt-4">Найти</button>
-      <div class="">
-        <h1 class="mt-3 text-center" v-for="(y, r) in arr" :key="r">{{y.city}}</h1>
+      <div class="info">
+        <h3 class="mt-3 text-center" v-for="(y, r) in arr" :key="r">{{y.name}}</h3>
         <h4 class="text-center"  v-for="(y, r) in arr" :key="r">{{y.main}}</h4>
-        <h1 class="temp text-center" v-for="(y, r) in arr" :key="r">{{y.temp}}</h1>
+        <h2 class="temp text-center" v-for="(y, r) in arr" :key="r">{{y.temp}}</h2>
         <div class="x2 text-center">
           <div class="cloud"></div>
         </div>
@@ -36,8 +36,14 @@ export default {
       .then(res => res.json())
       .then(json => {
         console.log(json);
+        let h3 = document.querySelector('h3')
+        let h4 = document.querySelector('h4')
+        let h2 = document.querySelector('h2')
+        h3.innerHTML = json['name']
+        h4.innerHTML = json['main']['temp']
+        h2.innerHTML = json['weather'][0]['main']
       })
-    },
+    }
 },
 mounted: function() {
     console.log("getLocation Called");
@@ -64,6 +70,7 @@ mounted: function() {
         .then(json => {
           console.log(json);
           let weatherInfo = {
+            name: json['name'],
             temp: json['main']['temp'],
             main: json['weather'][0]['main'],
             tempmax: json['main']['temp_max'],
@@ -100,7 +107,7 @@ body{
 
 .btn-search:hover{
   background-color: rgb(56, 22, 59);
-  border-radius: 15px;
+  border-radius: 50px;
   color: #fff;
 }
 
@@ -128,7 +135,7 @@ body{
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
-  margin-right: 0px !important;
+  margin-right: -242px !important;
 
 }
 }
@@ -144,7 +151,7 @@ body{
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
-  margin-right: 0px !important;
+  margin-right: -150px !important;
 
 }
 }
@@ -160,7 +167,7 @@ body{
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
-  margin-right: 0px !important;
+  margin-right: -150px !important;
 
 }
 }
@@ -176,7 +183,7 @@ body{
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
-  margin-right: 0px !important;
+  margin-left: 0px !important;
 
 }
 }
@@ -192,7 +199,7 @@ body{
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
-  margin-right: 0px !important;
+  margin-left: 0px !important;
 }
 }
 @media (max-width: 400px) {
@@ -207,7 +214,7 @@ body{
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
-  margin-right: 0px !important;
+  margin-left: 0px !important;
 
 }
 }
@@ -223,7 +230,7 @@ body{
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
-  margin-right: 0px !important;
+  margin-left: 0px !important;
 
 }
 }
@@ -310,7 +317,7 @@ body{
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
-  margin-right: -242px;
+  margin-right: -400px;
 }
 .cloud {
 	background: #ccc;
