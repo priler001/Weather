@@ -2,8 +2,20 @@
     <div class="content">
       <h1 class="text-center pt-5">Прогноз погоды</h1>
       <div class="weather-icons">
-      
-    </div>    
+          <!-- <div class="snow">
+            <div class="snow-block">
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+          </div>
+          </div> -->
+        <div class="sunny"></div>
+      </div>    
     <div class="row">
       <input type="text" class="form-control mt-4" placeholder="Введите страну">
       <button @click="weatherApi()" class="btn-search mt-4">Найти</button>
@@ -11,7 +23,6 @@
         <h3 class="mt-3 text-center" v-for="(y, r) in arr" :key="r">{{y.name}}</h3>
         <h4 class="text-center"  v-for="(y, r) in arr" :key="r">{{y.main}}</h4>
         <h2 class="temp text-center" v-for="(y, r) in arr" :key="r">{{y.temp}}</h2>
-        <img class="text-center" src="../assets/weather-icons-master/svg/wi-cloud.svg" alt="">
       </div>
     </div>
     </div>
@@ -29,26 +40,31 @@ export default {
   methods: {
     weatherApi() {
       let input = document.querySelector('input')
-      if (input.value == 0) {
+      if (input.value.length == 0) {
         input.style.border = '1px solid red'
       } else {
-        let token = '1cd30991dd9bd85fa384b9abc5096a2b'
         fetch(`https://api.openweathermap.org/data/2.5/weather?q=${input.value}&appid=1cd30991dd9bd85fa384b9abc5096a2b&units=metric`)
         .then(res => res.json())
         .then(json => {
           console.log(json);
+          let weatherIc = document.querySelector('.weather-icons')
+            switch (json['weather'][0]['main']) {
+            case 'Clouds':
+              weatherIc.innerHTML = '<div class="x2"><div class="cloud"></div></div>'
+              break;
+            case 'Clear':
+              weatherIc.innerHTML = '<div class="sunny"></div>'
+              break;
+          }
           let h3 = document.querySelector('h3')
           let h4 = document.querySelector('h4')
           let h2 = document.querySelector('h2')
           h3.innerHTML = json['name']
           h4.innerHTML = json['main']['temp']
           h2.innerHTML = json['weather'][0]['main']
-          switch (json['main']['temp']) {
-            case 'Clouds':
-              
-          }
+          let img = document.querySelector('img')
       })
-      input.style.border - '1px solid gray'
+      input.style.border = '1px solid gray'
       }
       
 } 
@@ -77,6 +93,15 @@ mounted: function() {
         .then(res => res.json())
         .then(json => {
           console.log(json);
+          
+          // let weatherIc = document.querySelector('.weather-icons')
+          // switch (json['weather'][0]['main']) {
+          //   case 'Clouds':
+          //     weatherIc.innerHTML = '<div class="x2"><div class="cloud"></div></div>'
+          //   case 'Clear':
+          //     weatherIc.innerHTML == '<div class="sunny"></div>'
+          //     break
+          // }
           let weatherInfo = {
             name: json['name'],
             temp: json['main']['temp'],
@@ -86,6 +111,7 @@ mounted: function() {
             feelslike: json['main']['feels_like']
           }
           this.arr.unshift(weatherInfo)
+          
         })
         
       })
@@ -326,7 +352,7 @@ img{
 } */
 
 
-/* .x2 {
+.x2 { 
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
@@ -389,19 +415,183 @@ img{
   height: 6px;
 
   animation: rain 0.65s linear infinite;
-} */
-/* .drop {
-  background-color: red;
-  width: 5px;
-  height: 89px;
-  position: absolute;
-  animation: fall .63s linear infinite;
-  animation-name: fall;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
 }
+
 
 /* animate the drops*/
 
+
+
+.sunny{
+    animation: sun 9s linear infinite;
+    background: #ffe400;
+    border-radius: 100%;
+    box-shadow: rgb(255 255 0 / 10%) 0 0 30px 30px;
+    display: flex;
+    height: 90px;
+    width: 90px;
+    text-align: center;
+    margin-right: -450px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* RAIN */
+
+.rain{
+  -webkit-transform: scale(0.3);
+	-moz-transform: scale(0.3);
+	transform: scale(0.3);
+  margin-right: -400px;
+}
+.rain-block {
+	background: #ccc;
+	background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);	
+	border-radius: 100px;
+  display: flex;
+	box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+	height: 120px;
+	position: relative;
+	width: 350px;
+  justify-content: space-between;
+}
+
+.rain-block:after, .rain-block:before {
+  background: #ccc;
+	content: '';
+	position: absolute;
+	z-indeX: -1;
+}
+
+.rain-block:after {
+	-webkit-border-radius: 100px;
+	-moz-border-radius: 100px;
+	border-radius: 100px;
+
+	height: 100px;
+	left: 50px;
+	top: -50px;
+	width: 100px;
+}
+
+.rain-block:before {
+	-webkit-border-radius: 200px;
+	-moz-border-radius: 200px;
+	border-radius: 200px;
+
+	width: 180px;
+	height: 180px;
+	right: 50px;
+	top: -90px;
+}
+
+.rain-{
+  width: 10px;
+  height: 50px;
+  background-color: rgb(79, 132, 182);
+  animation: rain 2s linear infinite;
+  margin-top: 100px;
+  border-radius: 10px;
+}
+
+@keyframes rain {
+  0%{
+    margin-top: 10px;
+    opacity: 0;
+  }
+  25%{
+    margin-top: 100px;
+    opacity: 1;
+  }
+  50%{
+    margin-top: 150px;
+    opacity: 1;
+  }
+  75%{
+    margin-top: 200px;
+    opacity: 0; 
+  }
+  100%{
+    opacity: 0;
+  }
+}
+
+.snow{
+  -webkit-transform: scale(0.3);
+	-moz-transform: scale(0.3);
+	transform: scale(0.3);
+  margin-right: -400px;
+}
+.snow-block {
+	background: #fff;
+	background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);	
+	border-radius: 100px;
+  display: flex;
+	box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+	height: 120px;
+	position: relative;
+	width: 350px;
+  justify-content: space-between;
+}
+
+.snow-block:after, .snow-block:before {
+  background: #fff;
+	content: '';
+	position: absolute;
+	z-indeX: -1;
+}
+
+.snow-block:after {
+	-webkit-border-radius: 100px;
+	-moz-border-radius: 100px;
+	border-radius: 100px;
+
+	height: 100px;
+	left: 50px;
+	top: -50px;
+	width: 100px;
+}
+
+.snow-block:before {
+	-webkit-border-radius: 200px;
+	-moz-border-radius: 200px;
+	border-radius: 200px;
+
+	width: 180px;
+	height: 180px;
+	right: 50px;
+	top: -90px;
+}
+
+.snow-{
+  width: 10px;
+  height: 30px;
+  background-color: #fff;
+  animation: rain 2s linear infinite;
+  margin-top: 100px;
+  border-radius: 10px;
+}
+
+@keyframes rain {
+  0%{
+    margin-top: 10px;
+    opacity: 0;
+  }
+  25%{
+    margin-top: 100px;
+    opacity: 1;
+  }
+  50%{
+    margin-top: 150px;
+    opacity: 1;
+  }
+  75%{
+    margin-top: 200px;
+    opacity: 0; 
+  }
+  100%{
+    opacity: 0;
+  }
+}
 </style>
 
