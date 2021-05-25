@@ -1,8 +1,8 @@
 <template>
     <div class="content">
       <h1 class="text-center pt-5">Прогноз погоды</h1>
-      <div class="weather-icons">
-          <!-- <div class="snow">
+      <div class="weather-icons text-center">
+           <!-- <div class="snow">
             <div class="snow-block">
               <article class="snow-"></article>
               <article class="snow-"></article>
@@ -14,11 +14,12 @@
               <article class="snow-"></article>
           </div>
           </div> -->
-        <div class="sunny"></div>
+        <!-- <div class="sunny"></div> -->
       </div>    
     <div class="row">
+      <!-- @click="weatherApi()" -->
       <input type="text" class="form-control mt-4" placeholder="Введите страну">
-      <button @click="weatherApi()" class="btn-search mt-4">Найти</button>
+      <button  class="btn-search mt-4">Найти</button>
       <div class="info">
         <h3 class="mt-3 text-center" v-for="(y, r) in arr" :key="r">{{y.name}}</h3>
         <h4 class="text-center"  v-for="(y, r) in arr" :key="r">{{y.main}}</h4>
@@ -48,13 +49,40 @@ export default {
         .then(json => {
           console.log(json);
           let weatherIc = document.querySelector('.weather-icons')
-            switch (json['weather'][0]['main']) {
+          switch (json['weather'][0]['main']) {
             case 'Clouds':
               weatherIc.innerHTML = '<div class="x2"><div class="cloud"></div></div>'
               break;
             case 'Clear':
-              weatherIc.innerHTML = '<div class="sunny"></div>'
+              weatherIc.innerHTML = '<div class="sunny"></div>'  
               break;
+            case 'Snow':
+              weatherIc.innerHTML = ` <div class="snow">
+              <div class="snow-block">
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+          </div>
+          </div>`
+              break;
+            case 'Rain':
+              weatherIc.innerHTML = ` <div class="rain">
+            <div class="rain-block">
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+          </div>
+          </div>`
           }
           let h3 = document.querySelector('h3')
           let h4 = document.querySelector('h4')
@@ -62,8 +90,7 @@ export default {
           h3.innerHTML = json['name']
           h4.innerHTML = json['main']['temp']
           h2.innerHTML = json['weather'][0]['main']
-          let img = document.querySelector('img')
-      })
+          }) 
       input.style.border = '1px solid gray'
       }
       
@@ -94,14 +121,42 @@ mounted: function() {
         .then(json => {
           console.log(json);
           
-          // let weatherIc = document.querySelector('.weather-icons')
-          // switch (json['weather'][0]['main']) {
-          //   case 'Clouds':
-          //     weatherIc.innerHTML = '<div class="x2"><div class="cloud"></div></div>'
-          //   case 'Clear':
-          //     weatherIc.innerHTML == '<div class="sunny"></div>'
-          //     break
-          // }
+          let weatherIc = document.querySelector('.weather-icons')
+          switch (json['weather'][0]['main']) {
+            case 'Clouds':
+              weatherIc.innerHTML = '<div class="x2"><div class="cloud"></div></div>'
+            case 'Clear':
+              weatherIc.innerHTML == '<div class="sunny"></div>'
+              break;
+            case 'Snow':
+              weatherIc.innerHTML = ` <div class="snow">
+              <div class="snow-block">
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+              <article class="snow-"></article>
+          </div>
+          </div>`
+              
+              break;
+            case 'Rain':
+              weatherIc.innerHTML = ` <div class="rain">
+            <div class="rain-block">
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+              <article class="rain-"></article>
+          </div>
+          </div>`
+            }
           let weatherInfo = {
             name: json['name'],
             temp: json['main']['temp'],
@@ -153,10 +208,28 @@ img{
   width: 100px;
   height: 100px;
 }
-
+.weather-icons{
+  display: flex;
+  justify-self: center;
+}
 .temp{
   font-size: 50px !important;
   font-weight: bold;
+}
+@media (max-width: 4000px) {
+
+  .x2 {
+	-webkit-transform: scale(0.3);
+	-moz-transform: scale(0.3);
+	transform: scale(0.3);
+  margin-right: -242px !important;
+}
+.snow{
+  margin-left: 470px;
+}
+.rain{
+  margin-left: 470px;
+}
 }
 @media (max-width: 1400px) {
   .container{
@@ -177,6 +250,14 @@ img{
   margin-right: -242px !important;
 
 }
+.snow{
+  display: flex;
+  justify-self: center;
+  margin-left: 300px;
+}
+.rain{
+  margin-left: 470px;
+}
 }
 @media (max-width: 1000px) {
   .container{
@@ -191,7 +272,7 @@ img{
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
   margin-right: -150px !important;
-
+  display: flex;
 }
 }
 @media (max-width: 900px) {
@@ -209,6 +290,7 @@ img{
   margin-right: -150px !important;
 
 }
+
 }
 @media (max-width: 800px) {
   .container{
@@ -223,7 +305,15 @@ img{
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
   margin-left: 0px !important;
-
+}
+.snow{
+  margin-left: 470px;
+}
+.rain{
+  margin-left: 470px;
+}
+.sunny{
+  margin-left: 300px !important;
 }
 }
 @media (max-width: 700px) {
@@ -240,10 +330,16 @@ img{
 	transform: scale(0.3);
   margin-left: 0px !important;
 }
+.rain{
+  margin-left: 470px;
 }
-@media (max-width: 400px) {
+.sunny{
+  margin-left: 200px !important;
+}
+}
+@media (max-width: 600px) {
   .container{
-    width: 350px !important;
+    width: 500px !important;
   }
   .btn-search{
     margin-top: 30px !important;
@@ -254,23 +350,71 @@ img{
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
   margin-left: 0px !important;
-
+}
+.snow{
+  margin-left: 470px;
+}
+.rain{
+  margin-left: 470px;
+}
+.sunny{
+  margin-left: 0 !important;
 }
 }
-@media (max-width: 300px) {
+@media (max-width: 500px) {
   .container{
-    width: 0px !important;
+    width: 300px !important;
   }
   .btn-search{
     margin-top: 30px !important;
-    width: 100px !important;
+    width: 100% !important;
   }
   .x2 {
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
   margin-left: 0px !important;
-
+}
+.weather-icons{
+  display: flex;
+  justify-content: center;
+}
+.snow{
+  margin-left: 0  !important;
+}
+.rain{
+  margin-left: 470px;
+}
+.sunny{
+  margin-left: 0 !important;
+}
+}
+@media (max-width: 400px) {
+  .container{
+    width: 300px !important;
+  }
+  .btn-search{
+    margin-top: 30px !important;
+    width: 100% !important;
+  }
+  .x2 {
+	-webkit-transform: scale(0.3);
+	-moz-transform: scale(0.3);
+	transform: scale(0.3);
+  margin-left: 0px !important;
+}
+.weather-icons{
+  display: flex;
+  justify-content: center;
+}
+.snow{
+  margin-left: 0  !important;
+}
+.rain{
+  margin-left: 470px;
+}
+.sunny{
+  margin-left: 0 !important;
 }
 }
 
@@ -356,7 +500,7 @@ img{
 	-webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
-  margin-right: -400px;
+  margin-left: 470px;
 }
 .cloud {
 	background: #ccc;
@@ -431,9 +575,9 @@ img{
     height: 90px;
     width: 90px;
     text-align: center;
-    margin-right: -450px;
     margin-top: 20px;
     margin-bottom: 20px;
+    margin-left: 600px;
 }
 
 /* RAIN */
@@ -520,7 +664,6 @@ img{
   -webkit-transform: scale(0.3);
 	-moz-transform: scale(0.3);
 	transform: scale(0.3);
-  margin-right: -400px;
 }
 .snow-block {
 	background: #fff;
